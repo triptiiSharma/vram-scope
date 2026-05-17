@@ -34,22 +34,34 @@ def collect_gpu_data():
 
     return gpu_data
 
+duration_input = input("How long to monitor? (seconds): ")
+duration = int(duration_input)
+
+interval_input = input("Sampling interval? (seconds): ")
+interval = float(interval_input)
+
+num_samples = int(duration / interval)
+
+print(f"\nMonitoring for {duration} seconds, sampling every {interval} second(s)...")
+print(f"Will collect {num_samples} measurements\n")
+
 measurements = []
 
-for i in range(5):
+for i in range(num_samples):
     data = collect_gpu_data()
     measurements.append(data)
 
-    if i < 4:
-        time.sleep(3)
-    print(f"Collected measurement {i+1}/5")
+    if i < num_samples - 1:
+        time.sleep(interval)
+    print(f"Collected measurement {i+1}/{num_samples}")
 
 
 print("\nAll measurements:")
 for measurement in measurements:
     print(measurement)
 
-filename = "data/gpu_logs.csv"
+timestamp = datetime.now().strftime("%Y-%m-%d_%H%M%S")
+filename = f"data/gpu_logs_{timestamp}.csv"
 
 fieldnames = list(measurements[0].keys())
 
