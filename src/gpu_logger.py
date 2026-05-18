@@ -15,9 +15,13 @@ def collect_gpu_data():
     memory_used_gb = memory.used / (1024**3)
     memory_free_gb = memory.free / (1024**3)
 
-    utilization = pynvml.nvmlDeviceGetUtilizationRates(device)
-    gpu_utilisation = utilization.gpu
-    memory_utilisation = utilization.memory
+    try:
+        utilization = pynvml.nvmlDeviceGetUtilizationRates(device)
+        gpu_utilisation = utilization.gpu
+        memory_utilisation = utilization.memory
+    except:
+        gpu_utilisation = 0
+        memory_utilisation = 0
 
     temperature = pynvml.nvmlDeviceGetTemperature(device, pynvml.NVML_TEMPERATURE_GPU)
 
